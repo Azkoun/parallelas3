@@ -34,12 +34,28 @@ int main() {
     h_B = (float*)malloc(size);
     h_C = (float*)malloc(size);
 
-    // Initialize host matrices
+
     randomInit(h_A, width * width);
     randomInit(h_B, width * width);
 
     cudaMalloc((void**)&d_A, size);
     cudaMalloc((void**)&d_B, size);
-    cudaMalloc((void**)&d_C, size);
+    cudaMalloc((void**)&d_C, size);cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+
+    dim3 threadsPerBlock(TILE_WIDTH, TILE_WIDTH);
+    dim3 blocksPerGrid((width + threadsPerBlock.x - 1) / threadsPerBlock.x,
+                       (width + threadsPerBlock.y - 1) / threadsPerBlock.y);
+    matrixMulTiled<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, width);
+
+
+    cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+
+
+    free(h_A); free(h_B); free(h_C);
+    cudaFree(d_A); cudaFree(d_B); cudaFree(d_C);
+
+    return 0;
+}
 
 
