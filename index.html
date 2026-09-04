@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lumen — Design Intelligence, Applied</title>
+<meta name="description" content="A one-page demo built from data-driven design intelligence: 192 reasoning rules, curated palettes and type pairings, distilled into one accessible, fast experience." />
+<meta name="color-scheme" content="dark light" />
+<meta name="theme-color" content="#000000" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fafafa' stroke='%23000' stroke-width='0.5' d='M12 1 L14.4 9.6 L23 12 L14.4 14.4 L12 23 L9.6 14.4 L1 12 L9.6 9.6 Z'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
+<script>
+  (function () {
+    try {
+      var stored = localStorage.getItem('lumen-theme');
+      var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  /* ---------- Tokens ---------- */
+  :root {
+    --font-heading: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+
+    --space-3xs: 0.25rem;
+    --space-2xs: 0.5rem;
+    --space-xs: 0.75rem;
+    --space-sm: 1rem;
+    --space-md: 1.5rem;
+    --space-lg: 2.5rem;
+    --space-xl: 4rem;
+    --space-2xl: 6rem;
+    --space-3xl: 9rem;
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-full: 999px;
+
+    --container: 1200px;
+    --border-width: 1px;
+
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-fast: 180ms;
+    --dur-base: 350ms;
+    --dur-slow: 550ms;
+
+    /* Dark theme (default) */
+    --bg: #000000;
+    --bg-elevated: #0a0a0a;
+    --fg: #fafafa;
+    --fg-muted: #9aa1ae;
+    --card: #0c0c0c;
+    --card-fg: #fafafa;
+    --border: #2a2a2e;
+    --border-strong: #3f3f46;
+    --btn-primary-bg: #f8fafc;
+    --btn-primary-fg: #0f172a;
+    --btn-primary-bg-hover: #ffffff;
+    --ring: #ffffff;
+    --accent-glow: 255, 255, 255;
+  }
+
+  :root[data-theme='light'] {
+    --bg: #ffffff;
+    --bg-elevated: #fbfbfc;
+    --fg: #0f172a;
+    --fg-muted: #52596b;
+    --card: #f8fafc;
+    --card-fg: #0f172a;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --btn-primary-bg: #0f172a;
+    --btn-primary-fg: #ffffff;
+    --btn-primary-bg-hover: #1e293b;
+    --ring: #0f172a;
+    --accent-glow: 15, 23, 42;
+  }
+
+  /* ---------- Reset ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  p { margin: 0; }
+
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: var(--space-sm);
+    top: -100px;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-fg);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-sm);
+    z-index: 200;
+    transition: top var(--dur-fast) var(--ease-out);
+    font-weight: 600;
+  }
+  .skip-link:focus { top: var(--space-sm); }
+
+  /* ---------- Layout helpers ---------- */
+  .wrap {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--space-md);
+  }
+  @media (min-width: 768px) { .wrap { padding-inline: var(--space-lg); } }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .eyebrow .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .icon { width: 1em; height: 1em; flex-shrink: 0; }
+
+  .btn {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    min-height: 48px;
+    padding: 0 var(--space-lg);
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    transition: transform var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-fg);
+    border: 1px solid transparent;
+  }
+  .btn-primary:hover { background: var(--btn-primary-bg-hover); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-ghost:hover { border-color: var(--fg-muted); }
+  .btn .icon { width: 18px; height: 18px; transition: transform var(--dur-base) var(--ease-out); }
+  .btn:hover .icon-shift { transform: translate(2px, -2px); }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-header .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 72px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  .brand .mark { width: 22px; height: 22px; color: var(--fg); }
+
+  .nav-links {
+    display: none;
+    align-items: center;
+    gap: var(--space-lg);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--fg-muted);
+  }
+  .nav-links a { padding: var(--space-2xs) 0; transition: color var(--dur-fast) var(--ease-out); }
+  .nav-links a:hover { color: var(--fg); }
+  @media (min-width: 900px) { .nav-links { display: flex; } }
+
+  .header-actions { display: flex; align-items: center; gap: var(--space-sm); }
+
+  .icon-btn {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+  }
+  .icon-btn:hover { border-color: var(--border-strong); background: var(--card); }
+  .icon-btn .icon { width: 19px; height: 19px; }
+  .icon-btn .icon-moon { display: none; }
+  :root[data-theme='light'] .icon-btn .icon-sun { display: none; }
+  :root[data-theme='light'] .icon-btn .icon-moon { display: block; }
+
+  .nav-toggle { display: inline-flex; }
+  @media (min-width: 900px) { .nav-toggle { display: none; } }
+  .nav-toggle .icon-close { display: none; }
+  html[data-menu='open'] .nav-toggle .icon-menu { display: none; }
+  html[data-menu='open'] .nav-toggle .icon-close { display: block; }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 72px 0 0 0;
+    background: var(--bg);
+    z-index: 90;
+    padding: var(--space-lg) var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+  html[data-menu='open'] .mobile-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  @media (min-width: 900px) { .mobile-menu { display: none; } }
+  .mobile-menu a {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 600;
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--space-2xl) var(--space-2xl);
+    isolation: isolate;
+  }
+  .hero-glow {
+    position: absolute;
+    inset: -20% -10% auto -10%;
+    height: 720px;
+    background:
+      radial-gradient(600px circle at var(--mx, 50%) var(--my, 20%), rgba(var(--accent-glow), 0.14), transparent 60%),
+      radial-gradient(900px circle at 80% 0%, rgba(var(--accent-glow), 0.08), transparent 55%);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+    opacity: 0.35;
+  }
+  .hero-inner { max-width: 780px; }
+  .hero h1 {
+    margin-top: var(--space-md);
+    font-size: clamp(2.5rem, 4.6vw + 1rem, 4.6rem);
+    text-wrap: balance;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--fg-muted);
+  }
+  .hero p.lede {
+    margin-top: var(--space-md);
+    max-width: 58ch;
+    font-size: clamp(1.05rem, 0.4vw + 1rem, 1.2rem);
+    color: var(--fg-muted);
+  }
+  .hero-actions {
+    margin-top: var(--space-lg);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  /* ---------- Sections ---------- */
+  section { padding-block: var(--space-2xl); }
+  .section-head { max-width: 640px; margin-bottom: var(--space-xl); }
+  .section-head h2 {
+    margin-top: var(--space-sm);
+    font-size: clamp(1.8rem, 1.6vw + 1.2rem, 2.6rem);
+  }
+  .section-head p { margin-top: var(--space-sm); color: var(--fg-muted); font-size: 1.05rem; }
+  .section-divider { border: 0; border-top: 1px solid var(--border); }
+
+  /* ---------- Capabilities (bento) ---------- */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-sm);
+  }
+  @media (min-width: 700px) { .bento { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1080px) { .bento { grid-template-columns: repeat(3, 1fr); } }
+  .card {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: border-color var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+  }
+  .card:hover { border-color: var(--border-strong); transform: translateY(-3px); }
+  .card.featured { grid-column: span 1; }
+  @media (min-width: 700px) {
+    .card.featured { grid-column: span 2; }
+  }
+  .card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    color: var(--fg);
+  }
+  .card-icon .icon { width: 22px; height: 22px; }
+  .card h3 {
+    margin-top: var(--space-md);
+    font-size: 1.15rem;
+  }
+  .card p {
+    margin-top: var(--space-2xs);
+    color: var(--fg-muted);
+    font-size: 0.95rem;
+    max-width: 42ch;
+  }
+
+  /* ---------- Process ---------- */
+  .process {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    counter-reset: step;
+  }
+  @media (min-width: 860px) { .process { grid-template-columns: repeat(4, 1fr); } }
+  .step {
+    position: relative;
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
+  }
+  .step::before {
+    counter-increment: step;
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--fg-muted);
+    letter-spacing: 0.08em;
+  }
+  .step h3 { margin-top: var(--space-sm); font-size: 1.1rem; }
+  .step p { margin-top: var(--space-2xs); color: var(--fg-muted); font-size: 0.95rem; }
+
+  /* ---------- Stats ---------- */
+  .stats {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl) var(--space-lg);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    text-align: left;
+  }
+  @media (min-width: 720px) { .stats { grid-template-columns: repeat(5, 1fr); } }
+  .stat .num {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 2vw + 1rem, 2.6rem);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .label {
+    margin-top: var(--space-3xs);
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- Craft / checklist ---------- */
+  .checklist {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+  @media (min-width: 700px) { .checklist { grid-template-columns: repeat(2, 1fr); } }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+  .check-item .check-icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg);
+  }
+  .check-item .check-icon .icon { width: 14px; height: 14px; }
+  .check-item strong { display: block; font-family: var(--font-heading); font-weight: 600; font-size: 0.98rem; }
+  .check-item span { color: var(--fg-muted); font-size: 0.9rem; }
+
+  /* ---------- CTA ---------- */
+  .cta {
+    text-align: center;
+    padding-block: var(--space-2xl) var(--space-3xl);
+  }
+  .cta h2 {
+    font-size: clamp(2rem, 3.2vw + 1rem, 3.4rem);
+    max-width: 18ch;
+    margin-inline: auto;
+    text-wrap: balance;
+  }
+  .cta p { margin-top: var(--space-md); color: var(--fg-muted); font-size: 1.05rem; }
+  .cta .hero-actions { justify-content: center; }
+
+  /* ---------- Footer ---------- */
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-lg);
+  }
+  .site-footer .wrap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: flex-start;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    color: var(--fg-muted);
+  }
+  @media (min-width: 700px) { .site-footer .wrap { flex-direction: row; align-items: center; } }
+  .footer-links { display: flex; gap: var(--space-md); flex-wrap: wrap; }
+  .footer-links a { transition: color var(--dur-fast) var(--ease-out); }
+  .footer-links a:hover { color: var(--fg); }
+
+  /* ---------- Reveal on scroll ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+    transition-delay: calc(var(--d, 0) * 70ms);
+  }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+    .reveal { opacity: 1; transform: none; }
+    .hero-glow { display: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Lumen, back to top">
+      <svg class="mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1 L14.4 9.6 L23 12 L14.4 14.4 L12 23 L9.6 14.4 L1 12 L9.6 9.6 Z"/></svg>
+      Lumen
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#process">Process</a>
+      <a href="#craft">Craft</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle color theme">
+        <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+      </button>
+      <button class="icon-btn nav-toggle" id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg class="icon icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="icon icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav id="mobile-menu" class="mobile-menu" aria-label="Mobile">
+  <a href="#capabilities">Capabilities</a>
+  <a href="#process">Process</a>
+  <a href="#craft">Craft</a>
+</nav>
+
+<main id="main">
+  <div id="top"></div>
+
+  <section class="hero">
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-glow" id="hero-glow" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow"><span class="dot"></span>Design intelligence, applied</span>
+      <h1>Beautiful interfaces, <em>reasoned</em> from first principles.</h1>
+      <p class="lede">This page wasn't picked from a template. It was assembled from a searchable system of styles, palettes, type pairings and UX rules — then held to the same accessibility and motion checklist it recommends to everyone else.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#capabilities">
+          Explore the capabilities
+          <svg class="icon icon-shift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#process">How it works</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow"><span class="dot"></span>Capabilities</span>
+        <h2>One reasoning engine, seven disciplines.</h2>
+        <p>Each card below is a live skill, not a mockup — the same one that shaped the page you're reading.</p>
+      </div>
+
+      <div class="bento">
+        <article class="card featured reveal" style="--d:0">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.2 6.4L20.8 12l-6.6 2.2L12 20.6 9.8 14.2 3.2 12l6.6-2.2L12 3Z"/></svg>
+          </div>
+          <h3>Design intelligence</h3>
+          <p>192 weighted reasoning rules turn a one-line brief into a complete design system — pattern, palette, type, motion, and the anti-patterns to avoid — in seconds.</p>
+        </article>
+
+        <article class="card reveal" style="--d:1">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="M3 12l9 5 9-5M3 16l9 5 9-5"/></svg>
+          </div>
+          <h3>Design systems</h3>
+          <p>Three-layer tokens — primitive to semantic to component — so every screen speaks the same visual language.</p>
+        </article>
+
+        <article class="card reveal" style="--d:2">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.3" fill="currentColor" stroke="none"/><circle cx="14" cy="8.5" r="1.1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="13" r="1.1" fill="currentColor" stroke="none"/><path d="M12 21a3 3 0 0 1-3-3c0-1 .8-1.2.8-2.2A2.3 2.3 0 0 0 7.5 13.5"/></svg>
+          </div>
+          <h3>Brand</h3>
+          <p>Voice, palette, and visual identity kept consistent from the landing page to the last footer link.</p>
+        </article>
+
+        <article class="card reveal" style="--d:0">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 6a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M4 12h16M14 12a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/><path d="M4 18h16M8 18a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z"/></svg>
+          </div>
+          <h3>UI styling</h3>
+          <p>Accessible, themeable components — light and dark designed together, not one inverted from the other.</p>
+        </article>
+
+        <article class="card reveal" style="--d:1">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="M3 16l5-4 4 3 3-3 6 5"/></svg>
+          </div>
+          <h3>Banners &amp; social</h3>
+          <p>On-brand creative sized for every platform, without starting again from a blank canvas each time.</p>
+        </article>
+
+        <article class="card reveal" style="--d:2">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/><path d="M7 12l3-3 2.5 2.5L17 7"/></svg>
+          </div>
+          <h3>Slides &amp; docs</h3>
+          <p>Strategic presentations built with the same tokens, type, and rigor as the product they describe.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow"><span class="dot"></span>Process</span>
+        <h2>From brief to shipped page.</h2>
+        <p>The same four moves, whether the deliverable is a landing page, a dashboard, or this section right here.</p>
+      </div>
+
+      <div class="process">
+        <div class="step reveal" style="--d:0">
+          <h3>Analyze</h3>
+          <p>Pull product type, audience, style keywords, and target stack out of the brief.</p>
+        </div>
+        <div class="step reveal" style="--d:1">
+          <h3>Reason</h3>
+          <p>Weigh 192 industry profiles to pick a pattern, palette, and typography pairing that actually fit.</p>
+        </div>
+        <div class="step reveal" style="--d:2">
+          <h3>Compose</h3>
+          <p>Assemble a token-based system: color, type, spacing, motion, and effects, defined once and reused everywhere.</p>
+        </div>
+        <div class="step reveal" style="--d:3">
+          <h3>Ship</h3>
+          <p>Deliver accessible, responsive, production-ready markup — no placeholder Lorem Ipsum required.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="stats reveal">
+        <div class="stat">
+          <div class="num">79</div>
+          <div class="label">Searchable UI styles</div>
+        </div>
+        <div class="stat">
+          <div class="num">192</div>
+          <div class="label">Reasoning profiles</div>
+        </div>
+        <div class="stat">
+          <div class="num">74</div>
+          <div class="label">Font pairings</div>
+        </div>
+        <div class="stat">
+          <div class="num">119</div>
+          <div class="label">UX guidelines</div>
+        </div>
+        <div class="stat">
+          <div class="num">22</div>
+          <div class="label">Supported stacks</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="craft">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow"><span class="dot"></span>Craft</span>
+        <h2>Held to its own checklist.</h2>
+        <p>Nothing here shipped without clearing the same pre-delivery list this system hands out to everyone else.</p>
+      </div>
+
+      <div class="checklist">
+        <div class="check-item reveal" style="--d:0">
+          <span class="check-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg></span>
+          <div><strong>Contrast, in both themes</strong><span>Text checked against 4.5:1 in light and dark — not just the mode the design was drafted in.</span></div>
+        </div>
+        <div class="check-item reveal" style="--d:1">
+          <span class="check-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg></span>
+          <div><strong>Visible focus, everywhere</strong><span>Every link, button, and toggle keeps a real focus ring for keyboard navigation.</span></div>
+        </div>
+        <div class="check-item reveal" style="--d:2">
+          <span class="check-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg></span>
+          <div><strong>Motion respects preference</strong><span>prefers-reduced-motion turns off decoration, not information — content stays complete.</span></div>
+        </div>
+        <div class="check-item reveal" style="--d:3">
+          <span class="check-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg></span>
+          <div><strong>Responsive by construction</strong><span>Fluid type and spacing, verified at 375 / 768 / 1024 / 1440.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <span class="eyebrow"><span class="dot"></span>Next</span>
+      <h2 class="reveal">Let's reason our way to something beautiful.</h2>
+      <p class="reveal" style="--d:1">This page is one output of the system — point it at your next brief and see what it proposes.</p>
+      <div class="hero-actions reveal" style="--d:2">
+        <a class="btn btn-primary" href="https://github.com/Azkoun/parallelas3" target="_blank" rel="noopener noreferrer">
+          View the repository
+          <svg class="icon icon-shift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#top">Back to top</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Lumen, back to top">
+      <svg class="mark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1 L14.4 9.6 L23 12 L14.4 14.4 L12 23 L9.6 14.4 L1 12 L9.6 9.6 Z"/></svg>
+      Lumen
+    </a>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#process">Process</a>
+      <a href="#craft">Craft</a>
+      <a href="https://github.com/Azkoun/parallelas3" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </nav>
+    <span>&copy; <span id="year"></span> Lumen — a design intelligence demo.</span>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    'use strict';
+
+    var root = document.documentElement;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // Year
+    var yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // Theme toggle
+    var themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        var next = current === 'light' ? 'dark' : 'light';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('lumen-theme', next); } catch (e) {}
+      });
+    }
+
+    // Mobile menu
+    var menuBtn = document.getElementById('menu-toggle');
+    var mobileMenu = document.getElementById('mobile-menu');
+    function closeMenu() {
+      root.removeAttribute('data-menu');
+      if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+    }
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', function () {
+        var isOpen = root.getAttribute('data-menu') === 'open';
+        if (isOpen) { closeMenu(); } else {
+          root.setAttribute('data-menu', 'open');
+          menuBtn.setAttribute('aria-expanded', 'true');
+        }
+      });
+      mobileMenu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', closeMenu);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+    }
+
+    // Scroll reveal
+    var revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && revealEls.length) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(function (el) { io.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+
+    // Cursor-follow glow (pointer devices only, motion allowed)
+    var glow = document.getElementById('hero-glow');
+    var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (glow && canHover && !reduceMotion.matches) {
+      var hero = document.querySelector('.hero');
+      hero.addEventListener('mousemove', function (e) {
+        var rect = hero.getBoundingClientRect();
+        var x = ((e.clientX - rect.left) / rect.width) * 100;
+        var y = ((e.clientY - rect.top) / rect.height) * 100;
+        glow.style.setProperty('--mx', x + '%');
+        glow.style.setProperty('--my', y + '%');
+      });
+    }
+  })();
+</script>
+</body>
+</html>
