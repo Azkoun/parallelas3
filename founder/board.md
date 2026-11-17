@@ -35,3 +35,32 @@ Memos: `board/offers.md`, `board/monopoly.md`, `board/product.md`.
 ## 4. The strongest version the board can see
 
 It is not exactly what was pitched. The winner is **C as the entry point, with B and A stacked on top**. Start by becoming the one WhatsApp number that pharmacies or grocers in one Lebanese city use to order from all their suppliers by voice note in dialect. The order is confirmed in under 30 seconds and lands straight in the distributor's ERP. Distributors pay setup plus monthly, and the pitch is "more orders, faster reorders, no missed orders", not "fewer salesmen". The order and payment history this builds is data nobody else has. From it come the premium layers: payment reminders and later trade credit (B, which the data makes defensible), and an owner dashboard with a daily voice brief and leak alerts (A). Then follow Lebanese-owned distributors into West Africa and the Gulf. The Offers lens's dissent stands: unless the offer is tied to measurable revenue and a guarantee, C risks being a commodity bot. `/founder-offer` must fix that.
+
+---
+
+# Rounds 2 and 3 (founder asked for an idea that scores 8+)
+
+Memos: `board/round2/`, `board/round3/`.
+
+| Round | Idea | Offers | Monopoly | Product | Avg |
+| --- | --- | --- | --- | --- | --- |
+| 2 | D ClaimBack (claims denials, Gulf hospitals) | 7 | 6 | 7 | 6.7 |
+| 2 | E BidDesk (tender engine, Gulf contractors) | 6 | 7 | 5 | 6.0 |
+| 2 | F Order Desk Network | 5 | 6 | 7 | 6.0 |
+| 2 | G TradeDesk (customs/duty) | 5 | 5 | 6 | 5.3 |
+| 3 | D2 ClaimBack Recovery (contingency appeals, clinics) | 7 FUND IF | 5 PASS | 6 FUND IF | 6.0 |
+| 3 | **E2 BidDesk Matrix** (MEP subcontractors, Gulf tenders) | 6 FUND IF | 6 FUND IF | 7 FUND IF | **6.3** |
+
+**Verdict: no idea earns 8 on paper.** E2 is the only one no member passed, and 2 of 3 picked it. Every member said what
+would lift it to 8, and every one of those is evidence, not a better pitch:
+
+- [ ] 5-10 MEP subcontractors sign as design partners and share how ONE giga-project owner actually answered
+      clarifications, accepted deviations and handled disputes (Monopoly: this owner-behaviour data is the moat;
+      the matrix alone is a commodity: aitenders, Document Crunch, Nomic, 12Build).
+- [ ] Launch on ONE project owner's tenders only; every matrix row cites its page (Product).
+- [ ] Free back-test on a tender the firm already bid, so the firm sees what it missed; guarantee covers a missed
+      clause, not just lateness (Offers).
+- [ ] Choose the owner carefully: reported NEOM cutbacks put that niche in doubt (Offers) → `/founder-competitors`.
+
+D2 dissent: Offers picked D2 and says it reaches 8 if aimed at denials still inside the resubmission window, then
+works new denials monthly. Monopoly found the same contingency model already sold in Dubai (Audit Firms Dubai, ClaimIQ).
